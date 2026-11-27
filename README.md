@@ -14,6 +14,21 @@ capacity allocator, a six-state action engine, and a synthetic replay. Federated
 evidence verification, durable event processing, and agent execution are planned.
 See [architecture and implementation status](docs/architecture.md) for boundaries.
 
+## Join the project
+
+We welcome Python developers, optimization specialists, and preparedness
+practitioners. You can contribute code, tests, documentation, or synthetic
+scenarios.
+
+- **New to the project?** [Pick a good first issue](https://github.com/PAG-droid/open-readiness-tower/contribute).
+- **Want a larger task?** [Browse help-wanted issues](https://github.com/PAG-droid/open-readiness-tower/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22help%20wanted%22).
+- **See it work:** [Follow the short synthetic demo](docs/demo.md).
+- **Ask a question or propose a scenario:** [Join Discussions](https://github.com/PAG-droid/open-readiness-tower/discussions).
+
+Every starter issue has acceptance criteria and pointers to the relevant files.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), comment on an issue with your approach,
+and submit a focused pull request. Domain feedback is welcome without coding.
+
 ## Design principles
 
 1. Verify operational evidence and its freshness instead of relying on self-assessment.

@@ -4,6 +4,19 @@ The project is maintained by [PAG-droid](https://github.com/PAG-droid). Bugs,
 design discussions, documentation improvements, and focused pull requests are
 welcome. For substantial changes, open an issue first to agree on scope.
 
+## Find your first contribution
+
+Start with the [newcomer issues](https://github.com/PAG-droid/open-readiness-tower/contribute)
+or the [help-wanted backlog](https://github.com/PAG-droid/open-readiness-tower/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22help%20wanted%22).
+Each issue explains the problem, relevant files, acceptance criteria, and checks.
+Comment with your intended approach so contributors can coordinate. If someone
+is already working on a task, ask how to collaborate or choose another issue.
+
+Try the [synthetic demo](docs/demo.md) to understand current behavior. Use
+[Q&A](https://github.com/PAG-droid/open-readiness-tower/discussions/categories/q-a)
+for setup questions and [Ideas](https://github.com/PAG-droid/open-readiness-tower/discussions/categories/ideas)
+for design proposals and preparedness scenarios. Non-code contributions are welcome.
+
 ## Local setup
 
 Follow the virtual environment and installation instructions in README.md.

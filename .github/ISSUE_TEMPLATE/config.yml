@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Setup questions and contributor help
+    url: https://github.com/PAG-droid/open-readiness-tower/discussions/categories/q-a
+    about: Ask how to run the demo or get started with a contribution.
+  - name: Design ideas and synthetic preparedness scenarios
+    url: https://github.com/PAG-droid/open-readiness-tower/discussions/categories/ideas
+    about: Discuss a proposal before starting a substantial change.
+  - name: Private vulnerability reporting
+    url: https://github.com/PAG-droid/open-readiness-tower/security/advisories/new
+    about: Report security vulnerabilities privately.
