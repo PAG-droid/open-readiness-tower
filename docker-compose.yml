@@ -1,0 +1,15 @@
+services:
+  event-bus:
+    image: redis:7-alpine
+    # Reserved for future integration; the replay currently runs in memory.
+
+  constraint-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_HOST=event-bus
+      - REDIS_PORT=6379
+    depends_on:
+      - event-bus
+    command: ["python", "simulation/timeline_emitter/run_replay.py"]

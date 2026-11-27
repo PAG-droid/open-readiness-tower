@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open-readiness-tower"
+version = "0.1.0"
+description = "Distributed Operational Control Tower for Complex Crises"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "Apache-2.0"}
+dependencies = [
+    "pydantic>=2.7.0,<3",
+    "ortools>=9.9.3963,<10",
+    "open-readiness-schemas==0.1.0",
+    "open-readiness-fsm==0.1.0"
+]
+
+[project.urls]
+Repository = "https://github.com/PAG-droid/open-readiness-tower"
+Issues = "https://github.com/PAG-droid/open-readiness-tower/issues"
+
+[tool.setuptools.packages.find]
+include = ["services*"]
+exclude = ["*.tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["packages/fsm_engine/tests", "services/constraint_solver"]

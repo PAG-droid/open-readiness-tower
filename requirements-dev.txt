@@ -1,0 +1,4 @@
+-e ./packages/schemas
+-e ./packages/fsm_engine
+-e .
+pytest>=8.0,<10
