@@ -1,5 +1,7 @@
 # Project documentation
 
+- [Short synthetic demo](demo.md)
+- [Ready-to-share contributor announcements](outreach.md)
 - [Architecture and implementation status](architecture.md)
 - [Project overview and setup](../README.md)
 - [Contribution workflow](../CONTRIBUTING.md)
