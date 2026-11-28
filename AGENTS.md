@@ -6,6 +6,32 @@ OpenReadiness is an early Python prototype for an operational readiness control
 tower. Read README.md and docs/architecture.md before changing behavior. Keep
 implemented capabilities distinct from the longer-term project vision.
 
+## Scope boundaries and roadmap
+
+The "What OpenReadiness Is NOT (Non-Goals)", "Domain Scope & Reference Baseline",
+and "3-Phase Engineering Roadmap" sections in README.md and CLAUDE.md govern all
+subsequent pull requests and code generation. Read them before proposing or
+implementing changes, and keep their duplicated content synchronized.
+
+- Do not introduce an interactive chatbot, LLM decision authority, centralized
+  proprietary partner data pooling, or a generic workflow-manager architecture.
+- Keep agents event-driven and schema-bounded, limited to unstructured ingestion
+  and summarization. Preserve accountable human authority over operational,
+  policy, and funding decisions; synthetic replay transitions are simulations,
+  not real human authorizations.
+- Use rapid medical countermeasure response on a 100-day operational timeline as
+  the primary reference baseline for synthetic data, tests, and scenarios.
+  Do not claim that the current replay validates that entire response timeline.
+- Map behavior changes to a roadmap phase in the PR description. Preserve Phase 1
+  invariants when adding Phase 2 or Phase 3 capabilities. Explain any proposed
+  scope change explicitly instead of silently extending the architecture.
+- Cryptographic proof verification before VERIFIED is a required target
+  safeguard. Until implemented, describe the current evidence-string check
+  accurately. A hash alone does not prove authenticity, and expiry filtering
+  is not the planned automated commitment-decay engine.
+- Update the roadmap and implementation-status documentation when capabilities
+  change. Keep unimplemented runtime, federation, and dashboard items unchecked.
+
 ## Architecture
 
 - `packages/schemas/`: Pydantic v2 data contracts.
