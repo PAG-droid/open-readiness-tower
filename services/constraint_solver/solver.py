@@ -1,6 +1,8 @@
+from datetime import UTC, datetime
 from typing import List, Dict, Tuple
 from ortools.linear_solver import pywraplp
 from open_readiness_schemas.models import CandidateIntervention, ManufacturingCapacitySlot, SlotStatus
+from open_readiness_schemas.timestamps import as_utc
 
 
 class AllocationResult:
@@ -20,8 +22,16 @@ class BioreactorAllocationSolver:
     @staticmethod
     def solve(
         candidates: List[CandidateIntervention],
-        slots: List[ManufacturingCapacitySlot]
+        slots: List[ManufacturingCapacitySlot],
+        *,
+        as_of: datetime | None = None,
     ) -> AllocationResult:
+        """Allocate against evidence fresh at as_of (defaults to the current UTC time).
+
+        Naive evaluation times are interpreted as UTC, matching slot timestamps.
+        Freshness is a metadata check, not independent evidence verification.
+        """
+        evaluation_time = as_utc(as_of) if as_of is not None else datetime.now(UTC)
         solver = pywraplp.Solver.CreateSolver("SCIP")
         if not solver:
             raise RuntimeError("OR-Tools SCIP solver unavailable.")
@@ -29,10 +39,12 @@ class BioreactorAllocationSolver:
         # x[c_id, s_id] = 1 if candidate c is assigned to slot s, else 0
         x: Dict[Tuple[str, str], pywraplp.Variable] = {}
         candidate_map = {c.candidate_id: c for c in candidates}
-        slot_map = {s.slot_id: s for s in slots}
-
         # Filter available slots with non-expired evidence
-        active_slots = [s for s in slots if s.status == SlotStatus.AVAILABLE]
+        active_slots = [
+            s for s in slots
+            if s.status == SlotStatus.AVAILABLE
+            and as_utc(s.evidence_expires_at) > evaluation_time
+        ]
 
         for c in candidates:
             for s in active_slots:
@@ -75,7 +87,8 @@ class BioreactorAllocationSolver:
                 cand = candidate_map[u]
                 conflicts.append(
                     f"Candidate '{u}' ({cand.platform.value}, {cand.bioreactor_volume_liters_required}L) "
-                    "could not be allocated due to capacity shortage or platform incompatibility."
+                    "has no allocation among available slots with fresh evidence, "
+                    "compatible platforms, and sufficient capacity."
                 )
 
         is_feasible = (len(unallocated) == 0)

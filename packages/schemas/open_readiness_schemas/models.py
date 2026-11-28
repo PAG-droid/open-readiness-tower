@@ -1,7 +1,9 @@
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
+
+from .timestamps import as_utc
 
 
 class ActionState(str, Enum):
@@ -39,8 +41,8 @@ class CandidateIntervention(BaseModel):
     candidate_id: str
     threat_pathogen_family: str
     platform: ProductionPlatform
-    target_dose_count: int
-    bioreactor_volume_liters_required: float
+    target_dose_count: int = Field(gt=0)
+    bioreactor_volume_liters_required: float = Field(gt=0, allow_inf_nan=False)
     storage_temp_celsius: float
     regulatory_target_regions: List[str]
     timestamp_emitted: datetime = Field(default_factory=datetime.utcnow)
@@ -59,13 +61,24 @@ class ManufacturingCapacitySlot(BaseModel):
     facility_id: str
     facility_country: str
     supported_platforms: List[ProductionPlatform]
-    bioreactor_capacity_liters: float
+    bioreactor_capacity_liters: float = Field(gt=0, allow_inf_nan=False)
     window_start: datetime
     window_end: datetime
     status: SlotStatus = SlotStatus.AVAILABLE
     evidence_hash: str = Field(..., description="Cryptographic SHA-256 hash of partner-signed slot reservation")
     evidence_expires_at: datetime
     allocated_candidate_id: Optional[str] = None
+
+    @field_validator("window_start", "window_end", "evidence_expires_at")
+    @classmethod
+    def normalize_allocation_timestamp(cls, value: datetime) -> datetime:
+        return as_utc(value)
+
+    @model_validator(mode="after")
+    def validate_window(self) -> "ManufacturingCapacitySlot":
+        if self.window_end <= self.window_start:
+            raise ValueError("window_end must be after window_start (compared in UTC)")
+        return self
 
 
 class AgentTrigger(str, Enum):

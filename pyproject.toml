@@ -25,4 +25,4 @@ include = ["services*"]
 exclude = ["*.tests*"]
 
 [tool.pytest.ini_options]
-testpaths = ["packages/fsm_engine/tests", "services/constraint_solver"]
+testpaths = ["packages/fsm_engine/tests", "packages/schemas/tests", "services/constraint_solver", "simulation/tests"]
