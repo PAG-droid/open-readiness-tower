@@ -73,6 +73,20 @@ The replay uses synthetic data and should allocate two candidates, advance their
 actions through APPROVED and ACCEPTED, and exit successfully. Fixture evidence
 strings are placeholders, not verified cryptographic proofs.
 
+Choose a disruption scenario or override the evaluation time:
+
+```bash
+python simulation/timeline_emitter/run_replay.py --fixture simulation/fixtures/capacity_shortage.json
+python simulation/timeline_emitter/run_replay.py --fixture simulation/fixtures/platform_mismatch.json
+python simulation/timeline_emitter/run_replay.py --as-of 2030-01-01T00:00:00Z
+```
+
+Expected allocation/unallocated counts are 1/1 for shortage, 0/1 for mismatch,
+and 0/2 for the expired-evidence override. Included fixtures use a fixed
+`evaluation_time`; `--as-of` overrides it. Without either, the solver uses the
+current UTC clock. Naive allocation timestamps are interpreted as UTC. See the
+[demo guide](docs/demo.md) for details and implementation limits.
+
 ## Containers
 
 With Docker running:

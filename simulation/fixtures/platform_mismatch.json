@@ -1,0 +1,34 @@
+{
+  "evaluation_time": "2026-11-27T00:00:00Z",
+  "candidates": [
+    {
+      "candidate_id": "cand_disease_x_001",
+      "threat_pathogen_family": "Paramyxoviridae",
+      "platform": "MRNA",
+      "target_dose_count": 5000000,
+      "bioreactor_volume_liters_required": 2000.0,
+      "storage_temp_celsius": -80.0,
+      "regulatory_target_regions": [
+        "WHO",
+        "EMA"
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "slot_id": "slot_cmo_asia_02",
+      "facility_id": "cmo_site_singapore",
+      "facility_country": "SG",
+      "supported_platforms": [
+        "VIRAL_VECTOR",
+        "RECOMBINANT_PROTEIN"
+      ],
+      "bioreactor_capacity_liters": 2500.0,
+      "window_start": "2026-12-10T00:00:00",
+      "window_end": "2027-02-01T00:00:00",
+      "status": "AVAILABLE",
+      "evidence_hash": "sha256_verified_reservation_asia_02",
+      "evidence_expires_at": "2027-04-01T00:00:00"
+    }
+  ]
+}

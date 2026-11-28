@@ -42,8 +42,9 @@ The checked-in [fixture](../simulation/fixtures/mock_data.json) contains:
 Expected output excerpts:
 
 ```text
-[T+00 Days] Ingested 2 candidate interventions from upstream R&D.
-[T+06 Days] STATUS: OPTIMAL ALLOCATION FOUND (No capacity collisions detected).
+[T+00 Days] Ingested 2 synthetic candidate interventions.
+Allocation summary: 2 allocated, 0 unallocated.
+[T+06 Days] STATUS: ALL CANDIDATES ALLOCATED within the modeled constraints.
   -> Candidate 'cand_disease_x_001' successfully mapped to Slot 'slot_cmo_europe_01'
   -> Candidate 'cand_disease_x_002' successfully mapped to Slot 'slot_cmo_asia_02'
 Replay simulation run completed successfully.
@@ -56,29 +57,57 @@ scenario stages, not elapsed execution time.
 ## What the result means
 
 For this fixture, each candidate has a platform-compatible AVAILABLE slot with
-sufficient volume. The allocator assigns at most one candidate per slot. This is
-not a complete manufacturing schedule: date windows, evidence expiry, shared
-facility constraints, and cold-chain routing are not yet enforced.
+sufficient volume and fresh evidence metadata at the evaluation time. The
+allocator assigns at most one candidate per slot. This is not a complete
+manufacturing schedule: scheduling within date windows, shared facility
+constraints, and cold-chain routing are not yet enforced.
 
-Some existing console messages use words such as "audited" or "verified" as
-scenario narration. All inputs are synthetic, evidence strings are placeholders,
-and the run does not independently verify reservations or physical readiness.
+All inputs are synthetic, evidence strings are placeholders, and the run does
+not independently verify reservations or physical readiness. It checks that an
+expiry timestamp is later than the evaluation time, not that its evidence is true.
 See [implementation status](architecture.md) for the full boundaries.
 
-## Explore a capacity conflict
-
-The existing collision test uses two compatible candidates competing for one
-slot and checks that exactly one remains unallocated:
+## Select a disruption scenario
 
 ```bash
-python -m pytest services/constraint_solver/test_solver.py -q
+python simulation/timeline_emitter/run_replay.py --fixture simulation/fixtures/capacity_shortage.json
+python simulation/timeline_emitter/run_replay.py --fixture simulation/fixtures/platform_mismatch.json
+python simulation/timeline_emitter/run_replay.py --as-of 2030-01-01T00:00:00Z
 ```
 
-Selectable replay fixtures are tracked in [issue #11](https://github.com/PAG-droid/open-readiness-tower/issues/11).
+| Scenario | Allocated | Unallocated | Reason |
+| --- | --- | --- | --- |
+| Default `mock_data.json` | 2 | 0 | Both candidates have eligible slots |
+| `capacity_shortage.json` | 1 | 1 | Two compatible candidates compete for one slot |
+| `platform_mismatch.json` | 0 | 1 | The available slot supports a different platform |
+| Default fixture with `--as-of 2030-01-01T00:00:00Z` | 0 | 2 | Both evidence timestamps have expired |
+
+Do not depend on which candidate wins a capacity tie. Each valid scenario exits
+zero, including those reporting a conflict. Missing or malformed files and invalid
+model values exit nonzero with an error message.
+
+## Evaluation time and validation
+
+Included fixtures contain `evaluation_time: "2026-11-27T00:00:00Z"`. This fixed
+scenario clock makes the replay reproducible, even after the evidence has expired
+in real time. `--as-of` takes precedence over the fixture time. If neither exists,
+the solver uses the current UTC clock.
+
+For manufacturing windows, evidence expiry, and evaluation times, a timestamp
+without an offset means UTC; other offsets are converted to UTC. Evidence expiring
+exactly at the evaluation time is excluded. Dose counts and volumes must be
+positive, volumes finite, and window end later than window start. Negative storage
+temperatures are valid.
+
+The tests exercise these boundaries and scenario result counts:
+
+```bash
+python -m pytest
+```
 
 ## Make a contribution
 
-- Add allocation edge-case tests: [#6](https://github.com/PAG-droid/open-readiness-tower/issues/6) or [#7](https://github.com/PAG-droid/open-readiness-tower/issues/7).
+- Add allocation edge-case tests: [#6](https://github.com/PAG-droid/open-readiness-tower/issues/6).
 - Check failed transitions preserve audit state: [#8](https://github.com/PAG-droid/open-readiness-tower/issues/8).
 - Explain the fixture fields: [#9](https://github.com/PAG-droid/open-readiness-tower/issues/9).
 - Discuss a synthetic preparedness scenario in [Ideas](https://github.com/PAG-droid/open-readiness-tower/discussions/categories/ideas).

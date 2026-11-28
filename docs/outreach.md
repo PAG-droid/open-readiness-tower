@@ -14,9 +14,10 @@ OR-Tools capacity allocator, a six-state action engine with in-memory audit
 records, and a runnable synthetic replay.
 
 We welcome Python developers, optimization specialists, and preparedness
-practitioners. Four beginner-friendly tasks cover solver tests, action-transition
-tests, and a data dictionary. Other open tasks cover evidence freshness, input
-validation, and scenario selection. Domain feedback and documentation count too.
+practitioners. Three beginner-friendly tasks cover solver tests, action-transition
+tests, and a data dictionary. Evidence freshness, input validation, and selectable
+synthetic scenarios are implemented and welcome further review. Domain feedback
+and documentation count too.
 
 This is an early prototype: federated evidence verification and production
 operations remain future work.
